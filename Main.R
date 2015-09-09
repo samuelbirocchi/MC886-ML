@@ -7,13 +7,13 @@ GD <- function(){
   y2 <- as.matrix(YearPredictionMSD[463716:nrow(YearPredictionMSD),1])
   x <- YearPredictionMSD[1:463715,]
   t <- YearPredictionMSD[463716:nrow(YearPredictionMSD),]
-  x[,1] <- 1
-  t[,1] <- 1
-  nov <- 2:91
   
   # feature normalization
-  x[,nov] <- (x[,nov] - mean(x[,nov]))/sd(x[,nov])
-  t[,nov] <- (t[,nov] - mean(t[,nov]))/sd(t[,nov])
+  x <- scale(x)
+  t <- scale(t)
+  
+  x[,1] <- 1
+  t[,1] <- 1
   
   grad.descent <- function(theta){
     error <- Inf
@@ -23,12 +23,12 @@ GD <- function(){
     #for(i in 1:5000){
       print(error)
       g <- as.numeric(alpha) * grad(theta)
-      m <- mean(g)
+      me <- mean(g)
       theta <- theta - g 
-      if (abs(m) > error || i > 1000) {
+      if (abs(me) > error || i > 500) {
         cont <- FALSE
       } else {
-        error <- abs(m)
+        error <- abs(me)
       }
       i <- i + 1
     }
